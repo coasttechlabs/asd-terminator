@@ -1,5 +1,6 @@
 import random
 import time
+import meme_generator
 
 # --- TICKET #2: DESIGN THE BLUEPRINT ---
 class BattleBot:
@@ -65,5 +66,7 @@ if __name__ == "__main__":
     print("\n🏆 GAME OVER 🏆")
     if bot1.is_alive():
         print(f"🎉 {bot1.name} WINS!")
+        meme_generator.generate_terminator_meme(bot1.name) # <--- Trigger Meme
     else:
         print(f"🎉 {bot2.name} WINS!")
+        meme_generator.generate_terminator_meme(bot2.name) # <--- Trigger Meme
