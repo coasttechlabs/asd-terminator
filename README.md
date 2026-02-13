@@ -1,2 +1,2 @@
 # asd-terminator
-sdfg
+TEST
