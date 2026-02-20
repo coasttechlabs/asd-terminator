@@ -57,10 +57,12 @@ class BattleBot:
         self.current_health = min(self.max_health, self.current_health + amount)
         print(f"   💊 {self.name} healed for {amount} health!")
         print(f"   ❤️ Health: {self.current_health}/{self.max_health}")
+        print(get_commentary("heal", self.name)) # Trigger heal commentary
 
     def recharge(self, amount):
         self.battery_life = min(100, self.battery_life + amount)
         print(f"   ⚡ {self.name} recharged by {amount}%. Current Battery: {self.battery_life}%")
+        print(get_commentary("recharge", self.name))
 
     def battery_drain(self, amount):
         self.battery_life = max(0, self.battery_life - amount)
@@ -79,6 +81,7 @@ class BattleBot:
         if random.randint(1, 100) > 80:
             damage = damage * 2
             print("   🔥 CRITICAL HIT! Double Damage! 🔥")
+            print(get_commentary("crit")) # Trigger critical hit commentary
 
         # Prevent negative damage (healing the enemy)
         damage = max(0, damage)
@@ -138,7 +141,9 @@ if __name__ == "__main__":
     print("\n🏆 GAME OVER 🏆")
     if bot1.is_alive():
         print(f"🎉 {bot1.name} WINS!")
+        print(get_commentary("win", bot1.name))
         meme_generator.generate_terminator_meme(bot1.name) # <--- Trigger Meme
     else:
         print(f"🎉 {bot2.name} WINS!")
+        print(get_commentary("win", bot2.name))
         meme_generator.generate_terminator_meme(bot2.name) # <--- Trigger Meme
