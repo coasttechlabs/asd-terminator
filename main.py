@@ -36,10 +36,15 @@ class BattleBot:
         # Calculate Damage
         damage = self.strength - enemy.defense
         
-        # Critical Hit Logic (20% chance)
-        if random.randint(1, 100) > 80:
-            damage = damage * 2
-            print("   🔥 CRITICAL HIT! Double Damage! 🔥")
+        # miss hit logic (20% chance)
+        if random.randint(1, 100) <= 20:
+            damage = 0
+            print("   ❌ MISS! No damage dealt!")
+        else:
+            # Critical Hit Logic (20% chance)
+            if random.randint(1, 100) > 80:
+                damage = damage * 2
+                print("   🔥 CRITICAL HIT! Double Damage! 🔥")
 
         # Prevent negative damage (healing the enemy)
         damage = max(0, damage)
@@ -88,7 +93,16 @@ if __name__ == "__main__":
 
         if bot1.battery_life > 0:
             bot1.attack(bot2)
+
+        if bot2.battery_life > 0:
+            bot2.attack(bot1)    
         
+        if bot1.battery_life == 0:
+            bot1.recharge(random.randint(5, 10))
+
+        if bot2.battery_life == 0:
+            bot2.recharge(random.randint(5, 10))
+
         # Check if bot2 survived befoSre counter-attacking
         if bot2.is_alive() and bot2.battery_life > 0:
             bot2.attack(bot1)
