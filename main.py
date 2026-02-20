@@ -2,6 +2,45 @@ import random
 import time
 import meme_generator
 
+# --- NEW: LIVE COMMENTARY DICTIONARY ---
+COMMENTARY = {
+    "round_start": [
+        "🎙️ COMMENTATOR: The gears are grinding! Let's see what happens this round.",
+        "🎙️ COMMENTATOR: Both combatants are looking for an opening...",
+        "🎙️ COMMENTATOR: I can smell the burning ozone from here! Here we go!",
+        "🎙️ COMMENTATOR: Will this be the round that changes everything?"
+    ],
+    "crit": [
+        "🎙️ COMMENTATOR: OH THE HUMANITY! Er, ROBOT-ITY! What a massive critical hit!",
+        "🎙️ COMMENTATOR: Right in the CPU! That's going to void the warranty!",
+        "🎙️ COMMENTATOR: BAH GAWD! He's broken in half! Sparks are flying everywhere!"
+    ],
+    "heal": [
+        "🎙️ COMMENTATOR: Looks like {bot} is applying some tactical duct tape!",
+        "🎙️ COMMENTATOR: A quick self-repair protocol for {bot}. They're back in the fight!",
+        "🎙️ COMMENTATOR: {bot} is patching up those dents. Smart strategy!"
+    ],
+    "battery_dead": [
+        "🎙️ COMMENTATOR: Oh no! {bot} is completely out of juice! They're a sitting duck!",
+        "🎙️ COMMENTATOR: Someone get {bot} a charging cable, STAT!"
+    ],
+    "recharge": [
+        "🎙️ COMMENTATOR: {bot} is desperately siphoning power from the arena floor!",
+        "🎙️ COMMENTATOR: Emergency power engaged for {bot}!"
+    ],
+    "win": [
+        "🎙️ COMMENTATOR: AND IT'S ALL OVER! {bot} takes the scrap-metal crown!",
+        "🎙️ COMMENTATOR: What an unbelievable match! {bot} proves to be the ultimate machine today!"
+    ]
+}
+
+def get_commentary(event_type, bot_name=""):
+    """Fetches a random commentary line based on the event."""
+    phrases = COMMENTARY.get(event_type, ["🎙️ COMMENTATOR: ..."])
+    chosen_phrase = random.choice(phrases)
+    return chosen_phrase.format(bot=bot_name)
+
+
 # --- TICKET #2: DESIGN THE BLUEPRINT ---
 class BattleBot:
     def __init__(self, name):
@@ -18,10 +57,12 @@ class BattleBot:
         self.current_health = min(self.max_health, self.current_health + amount)
         print(f"   💊 {self.name} healed for {amount} health!")
         print(f"   ❤️ Health: {self.current_health}/{self.max_health}")
+        print(get_commentary("heal", self.name)) # Trigger heal commentary
 
     def recharge(self, amount):
         self.battery_life = min(100, self.battery_life + amount)
         print(f"   ⚡ {self.name} recharged by {amount}%. Current Battery: {self.battery_life}%")
+        print(get_commentary("recharge", self.name))
 
     def battery_drain(self, amount):
         self.battery_life = max(0, self.battery_life - amount)
@@ -36,15 +77,11 @@ class BattleBot:
         # Calculate Damage
         damage = self.strength - enemy.defense
         
-        # miss hit logic (20% chance)
-        if random.randint(1, 100) <= 20:
-            damage = 0
-            print("   ❌ MISS! No damage dealt!")
-        else:
-            # Critical Hit Logic (20% chance)
-            if random.randint(1, 100) > 80:
-                damage = damage * 2
-                print("   🔥 CRITICAL HIT! Double Damage! 🔥")
+        # Critical Hit Logic (20% chance)
+        if random.randint(1, 100) > 80:
+            damage = damage * 2
+            print("   🔥 CRITICAL HIT! Double Damage! 🔥")
+            print(get_commentary("crit")) # Trigger critical hit commentary
 
         # Prevent negative damage (healing the enemy)
         damage = max(0, damage)
@@ -113,7 +150,9 @@ if __name__ == "__main__":
     print("\n🏆 GAME OVER 🏆")
     if bot1.is_alive():
         print(f"🎉 {bot1.name} WINS!")
+        print(get_commentary("win", bot1.name))
         meme_generator.generate_terminator_meme(bot1.name) # <--- Trigger Meme
     else:
         print(f"🎉 {bot2.name} WINS!")
+        print(get_commentary("win", bot2.name))
         meme_generator.generate_terminator_meme(bot2.name) # <--- Trigger Meme
