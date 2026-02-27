@@ -28,6 +28,13 @@ COMMENTARY = {
     "win": [
         "🎙️ COMMENTATOR: AND IT'S ALL OVER! {bot} takes the scrap-metal crown!",
         "🎙️ COMMENTATOR: What an unbelievable match! {bot} proves to be the ultimate machine today!"
+    ],
+    # NEW: Dodge commentary lines
+    "dodge": [
+        "🎙️ COMMENTATOR: Wow! {bot} moved with the speed of a greased microchip!",
+        "🎙️ COMMENTATOR: A clean miss! {bot} dances right around that attack!",
+        "🎙️ COMMENTATOR: Whoa! Is {bot} programmed with the Matrix dodge module?!",
+        "🎙️ COMMENTATOR: Whiff! They're punching air out there!"
     ]
 }
 

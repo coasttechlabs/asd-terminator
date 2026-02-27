@@ -10,7 +10,8 @@ class BattleBot:
         self.strength = random.randint(10, 20)  
         self.defense = random.randint(0, 5)     
         self.battery_life = random.randint(50, 100) 
-        print(f"🤖 FACTORY: Built {self.name} | STR: {self.strength} | DEF: {self.defense} | BATT: {self.battery_life}%")
+        self.dodge_chance = random.randint(10, 25)
+        print(f"🤖 FACTORY: Built {self.name} | STR: {self.strength} | DEF: {self.defense} | BATT: {self.battery_life}% | DODGE: {self.dodge_chance}%")
 
     def heal(self, amount):
         self.current_health = min(self.max_health, self.current_health + amount)
@@ -30,6 +31,10 @@ class BattleBot:
     def attack(self, enemy):
         print(f"\n⚔️ {self.name} attacks {enemy.name}!")
         time.sleep(1)
+        if random.randint(1,100) <= enemy.dodge_chance:
+            print(f"  💨SWOOSH! {enemy.name} swiftly doged the attack!")
+            print(get_commentary("dodge", enemy.name))
+            return
 
         damage = self.strength - enemy.defense
         
