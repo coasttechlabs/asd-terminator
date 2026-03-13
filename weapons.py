@@ -1,65 +1,38 @@
-import battle_bot
+import random
 
-class weapons:
-    def __init__(self, name, weapon, weapon_effects,):
-        self.name = name
-        self.weapon_effects = weapon_effects
-        self.weapon = weapon
-        self.weapon_name = weapon
-        self.weapon_strength = weapon_effects
-    
-    def get_weapon_info(self):
-        return f"{self.name} wields a {self.weapon_name} with effects {self.weapon_effects}."
-    
-    def get_weapon_info(self):
-        print(f"{self.name} wields a {self.weapon_name}.")
+class Weapon: # Renamed to singular 'Weapon' for PEP8 standards
+    def __init__(self, weapon_name):
+        self.weapon_name = weapon_name
+        # Fetch stats immediately upon initialization
+        stats = self.get_weapon_statistics(weapon_name)
+        self.strength_bonus = stats["strength"]
+        self.type_description = stats["type"]
+        self.category = self.determine_category()
 
-    def weapon_type(self):
-        if self.weapon_strength >= 15:
+    def determine_category(self):
+        if self.strength_bonus >= 15:
             return "Heavy Weapon"
-        elif self.weapon_strength >= 10:
+        elif self.strength_bonus >= 10:
             return "Medium Weapon"
         else: 
             return "Light Weapon"
         
-    def weapon_names(self, weapon):
-        if self.weapon == "Decimator":
-            return "Decimator"
-        elif self.weapon == "Cain-Sword":
-            return "Cain-Sword"
-        elif self.weapon == "plasma-gun":
-            return "plasma-gun"
-        else:
-            return self.weapon
-    
-    def weapon_statistics(self, weapon):
-        if self.weapon == "Decimator":
-            return {"name": "Decimator", "strength": 20, "type": "Heavy Blade, explosive, melee"}
-        elif self.weapon == "Cain-Sword":
-            return {"name": "Cain-Sword", "strength": 5, "type": "Light Blade, multiple strikes, melee"}
-        elif self.weapon == "plasma-gun":
-            return {"name": "plasma-gun", "strength": 10, "type": "Ranged, overheat"}
-        else:
-            return {"name": self.weapon, "strength": 0, "type": "Unknown"}
-        
-    def weapon_effects(self, weapon_effects):
-            self.explosive_effects = ["Area damage"]
-            self.multiple_strikes_effects = ["hits multiple times in one turn"]
-            self.deadly_demise_effects = ["random randint(1, 100) rolls a 1-10 self damage"]
-            self.melee_effects = ["close proximity to deal damage"]
-            self.ranged_effects = ["can attack from a distance"]
-            self.over_heat_effects = ["adds 5 weapon strength but deadly demise effect applies"]
+    def get_weapon_statistics(self, name):
+        # Database of weapon stats
+        weapons_data = {
+            "Decimator": {"strength": 20, "type": "Heavy Blade, explosive, melee"},
+            "Cain-Sword": {"strength": 5, "type": "Light Blade, multiple strikes, melee"},
+            "plasma-gun": {"strength": 12, "type": "Ranged, overheat"},
+            "rifle": {"strength": 10, "type": "hybrid"}
+        }
+        return weapons_data.get(name, {"strength": 5, "type": "Unknown"})
 
-    def apply_weapon_effects(self, enemy):
-        if self.weapon_effects == "explosive":
-            return f"{self.explosive_effects}!"
-        if self.weapon_effects == "multiple strikes":
-            return f"{self.multiple_strikes_effects}!"
-        if self.weapon_effects == "deadly demise":
-            return f"{self.deadly_demise_effects}!"
-        if self.weapon_effects == "melee":
-            return f"{self.melee_effects}!"
-        if self.weapon_effects == "ranged":
-            return f"{self.ranged_effects}!"
-        if self.weapon_effects == "overheat":
-            return f"{self.over_heat_effects}!"
+    def apply_effects(self):
+        """Returns a string description of the weapon's special trait."""
+        if "explosive" in self.type_description:
+            return "💥 Area damage potential!"
+        if "multiple strikes" in self.type_description:
+            return "⚔️ Rapid fire strikes!"
+        if "overheat" in self.type_description:
+            return "🔥 High heat, high damage!"
+        return "🛡️ Standard combat mode."

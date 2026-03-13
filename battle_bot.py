@@ -1,6 +1,7 @@
 import random
 import time
 from commentary import get_commentary
+from weapons import Weapon 
 
 class BattleBot:
     def __init__(self, name):
@@ -11,62 +12,61 @@ class BattleBot:
         self.defense = random.randint(0, 5)     
         self.battery_life = random.randint(50, 100) 
         self.dodge_chance = random.randint(10, 25)
-        print(f"🤖 FACTORY: Built {self.name} | STR: {self.strength} | DEF: {self.defense} | BATT: {self.battery_life}% | DODGE: {self.dodge_chance}%")
+        
+        # Weapon Instance
+        available_choices = ["Decimator", "Cain-Sword", "plasma-gun", "rifle"]
+        self.weapon = Weapon(random.choice(available_choices))
+        
+        print(f"🤖 FACTORY: {self.name} online.")
+        print(f"📦 LOADOUT: {self.weapon.category} - {self.weapon.weapon_name} (+{self.weapon.strength_bonus} DMG)")
 
     def heal(self, amount):
+        """Standard heal method called by main.py or internal logic."""
         self.current_health = min(self.max_health, self.current_health + amount)
-        print(f"   💊 {self.name} healed for {amount} health!")
+        print(f"   💊 {self.name} performed repairs! +{amount} HP.")
         print(f"   ❤️ Health: {self.current_health}/{self.max_health}")
         print(get_commentary("heal", self.name))
 
-    def recharge(self, amount):
-        self.battery_life = min(100, self.battery_life + amount)
-        print(f"   ⚡ {self.name} recharged by {amount}%. Current Battery: {self.battery_life}%")
-        print(get_commentary("recharge", self.name))
-
-    def battery_drain(self, amount):
-        self.battery_life = max(0, self.battery_life - amount)
-        print(f"   🔋 {self.name}'s battery drained by {amount}%. Remaining: {self.battery_life}%")
-
     def attack(self, enemy, round_num):
-        print(f"\n⚔️ {self.name} attacks {enemy.name}!")
-        time.sleep(1)
-        if random.randint(1,100) <= enemy.dodge_chance:
-            print(f"  💨SWOOSH! {enemy.name} swiftly doged the attack!")
-            print(get_commentary("dodge", enemy.name))
+        print(f"\n⚔️ {self.name} strikes {enemy.name} with {self.weapon.weapon_name}!")
+        
+        if random.randint(1, 100) <= enemy.dodge_chance:
+            print(f"  💨 {enemy.name} dodged the {self.weapon.weapon_name}!")
             return
 
-        damage = self.strength - enemy.defense
+        total_power = self.strength + self.weapon.strength_bonus
+        damage = total_power - enemy.defense
 
-        if round_num >= 5 and random.randint(1, 100) > 50:
+        if random.random() > 0.7:
+            print(f"  ✨ EFFECT: {self.weapon.apply_effects()}")
+
+        if round_num >= 5:
             damage = int(damage * 1.5)
-            print(" ⚠️ LATE ROUND SURGE! Damage increased by 50%! ⚠️")
         
-        if random.randint(1, 100) > 80:
-            damage = damage * 2
-            print("   🔥 CRITICAL HIT! Double Damage! 🔥")
-            print(get_commentary("crit"))
-
-        damage = max(0, damage)
+        damage = max(2, damage) 
         enemy.take_damage(damage)
 
     def take_damage(self, amount):
         self.current_health -= amount
-        print(f"   💥 {self.name} took {amount} damage!")
-        print(f"   ❤️ Health: {self.current_health}/{self.max_health}")
+        print(f"   💥 {self.name} took {amount} damage! (HP: {self.current_health})")
 
     def is_alive(self):
         return self.current_health > 0
-    
+
     def take_turn(self, enemy, round_num):
-        """Encapsulates the logic for a single bot's turn."""
         if not self.is_alive():
             return
-            
+
+        # NEW: Emergency Self-Repair Logic
+        # If health is below 30%, there's a 30% chance to heal instead of attacking
+        if self.current_health < 30 and random.random() < 0.3:
+            self.heal(random.randint(15, 25))
+            return 
+
         if self.battery_life > 0:
-            self.battery_drain(random.randint(5, 25))
+            self.battery_life -= random.randint(5, 15)
             self.attack(enemy, round_num)
         else:
-            print(f"⚠️ {self.name} has no battery left and cannot attack! Enacting emergency recharge...")
-            print(get_commentary("battery_dead", self.name))
-            self.recharge(random.randint(20, 40))
+            print(f"🪫 {self.name} is recharging...")
+            self.battery_life += 30
+            self.heal(5) # Small passive heal during recharge
