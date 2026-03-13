@@ -28,7 +28,7 @@ class BattleBot:
         self.battery_life = max(0, self.battery_life - amount)
         print(f"   🔋 {self.name}'s battery drained by {amount}%. Remaining: {self.battery_life}%")
 
-    def attack(self, enemy):
+    def attack(self, enemy, round_num):
         print(f"\n⚔️ {self.name} attacks {enemy.name}!")
         time.sleep(1)
         if random.randint(1,100) <= enemy.dodge_chance:
@@ -37,6 +37,10 @@ class BattleBot:
             return
 
         damage = self.strength - enemy.defense
+
+        if round_num >= 5 and random.randint(1, 100) > 50:
+            damage = int(damage * 1.5)
+            print(" ⚠️ LATE ROUND SURGE! Damage increased by 50%! ⚠️")
         
         if random.randint(1, 100) > 80:
             damage = damage * 2
@@ -54,14 +58,14 @@ class BattleBot:
     def is_alive(self):
         return self.current_health > 0
     
-    def take_turn(self, enemy):
+    def take_turn(self, enemy, round_num):
         """Encapsulates the logic for a single bot's turn."""
         if not self.is_alive():
             return
             
         if self.battery_life > 0:
             self.battery_drain(random.randint(5, 25))
-            self.attack(enemy)
+            self.attack(enemy, round_num)
         else:
             print(f"⚠️ {self.name} has no battery left and cannot attack! Enacting emergency recharge...")
             print(get_commentary("battery_dead", self.name))

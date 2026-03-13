@@ -26,11 +26,11 @@ if __name__ == "__main__":
             time.sleep(1)
 
         # Execute Turns
-        bot1.take_turn(bot2)
+        bot1.take_turn(bot2, round_num)
         time.sleep(1)
         
         if bot2.is_alive(): # Ensure bot2 is still alive before it counters
-            bot2.take_turn(bot1)
+            bot2.take_turn(bot1, round_num)
 
         round_num += 1
         time.sleep(1.5)
