@@ -3,6 +3,7 @@ import time
 import meme_generator
 from commentary import get_commentary
 from battle_bot import BattleBot
+from levels import levels
 
 if __name__ == "__main__":
     print("📢 WELCOME TO THE INNOVATION CENTRE FIGHT CLUB 📢")
@@ -16,6 +17,9 @@ if __name__ == "__main__":
         print(f"\n{'='*20}")
         print(f"--- ROUND {round_num} ---")
         print(f"{'='*20}")
+        current_level = random.choice(levels)
+        print("you are in level " + current_level["name"])
+        print(current_level["description"])
         print(get_commentary("round_start"))
         time.sleep(1)
 

@@ -1,5 +1,4 @@
 import random
-import battle_bot
 
 def __init__(self, name, enemy, health, strength, defense, attack):
         self.name = name
