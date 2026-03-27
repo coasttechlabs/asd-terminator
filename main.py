@@ -30,11 +30,11 @@ if __name__ == "__main__":
             time.sleep(1)
 
         # Execute Turns
-        bot1.take_turn(bot2, round_num)
+        bot1.take_turn(bot2, round_num, current_level)
         time.sleep(1)
         
         if bot2.is_alive(): # Ensure bot2 is still alive before it counters
-            bot2.take_turn(bot1, round_num)
+            bot2.take_turn(bot1, round_num, current_level)
 
         round_num += 1
         time.sleep(1.5)
@@ -46,3 +46,4 @@ if __name__ == "__main__":
     print(f"🎉 {winner.name} WINS!")
     print(get_commentary("win", winner.name))
     meme_generator.generate_terminator_meme(winner.name)
+

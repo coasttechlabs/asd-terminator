@@ -1,18 +1,18 @@
 import battle_bot
 import random
 
-def handle_imput(self):
+def handle_imput(self, level):
     choice = handle_imput( "choose (h)eal or (r)echarge or (l)eave or (a)ttack or (d)efend: ")
     if choice == "h":
         self.heal_health
     elif choice == "r":
-        self.recharge_battery
+        self.recharge_battery(level) # level affects recharge
     elif choice == "l":
         self.leave
     elif choice == "a":
-          self.do_attack 
+          self.do_attack(level) # level affects attack
     elif choice == "d":
-          self.do_defend
+          self.do_defend(level) # level affects defend
        
 
 def heal_health(self):
@@ -50,3 +50,18 @@ def do_defend(self):
       player_battery_used = random.randint(1, 10)
       player_battery_used -= self.battery_life
       print(f"{self.name} used {player_battery_used}")
+
+def desert_level(self, level):
+        if level ["name"] == "desert":
+            self.battery_life += 10  # Recharge battery in desert
+            print(f"☀️ {self.name} is benefiting from the desert heat!")
+
+def forest_level(self, level):
+        if level ["name"] == "forest":
+            self.defense += 5  # Increase defense in forest
+            print(f"🌳 {self.name} is using the trees for cover, increasing defense!")
+
+def frozen_lake_level(self, level):
+        if level ["name"] == "frozen lake":
+            self.dodge_chance += 15  # Increase dodge chance on frozen lake
+            print(f"❄️ {self.name} is slipping around on the frozen lake, increasing dodge chance!")

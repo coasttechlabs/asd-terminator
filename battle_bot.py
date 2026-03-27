@@ -53,7 +53,7 @@ class BattleBot:
     def is_alive(self):
         return self.current_health > 0
 
-    def take_turn(self, enemy, round_num):
+    def take_turn(self, enemy, round_num, current_level):
         if not self.is_alive():
             return
 
